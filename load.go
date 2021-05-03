@@ -35,7 +35,7 @@ func LoadFromReader(file io.Reader, destination interface{}, options ...CsvOptio
 		option = options[0]
 	}
 
-	header, content, err := readFile(file, option.Separator, option.Header)
+	header, content, err := readFile(file, option.Separator, option.Header, option.Skip)
 	if err != nil {
 		return fmt.Errorf("error reading csv from io.Reader: %v", err)
 	}
@@ -106,7 +106,7 @@ func LoadFromString(str string, destination interface{}, options ...CsvOptions) 
 // @param file: the io.Reader to read from.
 // @param separator: the separator used in the csv file.
 // @param header: the optional header if the file does not contain one.
-func readFile(file io.Reader, separator rune, header []string) ([]string, [][]string, error) {
+func readFile(file io.Reader, separator rune, header []string, skip int) ([]string, [][]string, error) {
 	// Create and configure the csv reader.
 	reader := csv.NewReader(file)
 	reader.TrimLeadingSpace = true
@@ -126,6 +126,9 @@ func readFile(file io.Reader, separator rune, header []string) ([]string, [][]st
 		return nil, nil, nil
 	}
 
+	if skip > 0 {
+		content = content[skip:]
+	}
 	// If no header is provided, treat first line as the header.
 	if header == nil {
 		header = content[0]
