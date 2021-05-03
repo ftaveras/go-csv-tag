@@ -15,7 +15,7 @@ It is kept compatible with changes in the Go ecosystem but no new features will 
 
 # Install
 
-`go get github.com/artonge/go-csv-tag/v2`
+`go get github.com/ftaveras/go-csv-tag/v3`
 
 # Example
 
